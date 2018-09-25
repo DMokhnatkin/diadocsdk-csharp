@@ -15,6 +15,7 @@ using Diadoc.Api.Proto.Forwarding;
 using Diadoc.Api.Proto.Invoicing;
 using Diadoc.Api.Proto.Invoicing.Signers;
 using Diadoc.Api.Proto.Recognition;
+using Diadoc.Api.Proto.Users;
 using DocumentType = Diadoc.Api.Proto.DocumentType;
 using Employee = Diadoc.Api.Proto.Employees.Employee;
 
@@ -35,6 +36,7 @@ namespace Diadoc.Api
 		string AuthenticateWithCertificate(string thumbprint, bool useLocalSystemStorage = false);
 		string AuthenticateWithSid(string sid);
 		OrganizationUserPermissions GetMyPermissions(string authToken, string orgId);
+		ReadonlyList GetOrganizationUsers(string authToken, string orgId);
 		ReadonlyList GetMyOrganizations(string authToken, bool autoRegister = true);
 		ReadonlyList GetOrganizationsByInnKpp(string inn, string kpp);
 		Organization GetOrganizationById(string orgId);
@@ -336,6 +338,7 @@ namespace Diadoc.Api
 
 		User GetMyUser(string authToken);
 		UserV2 GetMyUserV2(string authToken);
+		UserV2 UpdateMyUser(string authToken, [MarshalAs(UnmanagedType.IDispatch)] object userToUpdate);
 		AsyncMethodResult CloudSign(string authToken, [MarshalAs(UnmanagedType.IDispatch)] object request, string certificateThumbprint);
 		CloudSignResult WaitCloudSignResult(string authToken, string taskId);
 		AsyncMethodResult CloudSignConfirm(string authToken, string cloudSignToken, string confirmationCode);
@@ -1006,6 +1009,11 @@ namespace Diadoc.Api
 		public UserV2 GetMyUserV2(string authToken)
 		{
 			return diadoc.GetMyUserV2(authToken);
+		}
+
+		public UserV2 UpdateMyUser(string authToken, object userToUpdate)
+		{
+			return diadoc.UpdateMyUser(authToken, (UserToUpdate) userToUpdate);
 		}
 
 		public AsyncMethodResult CloudSign(string authToken, object request, string certificateThumbprint)
